@@ -14,28 +14,26 @@
 [ GUI ] -> [ JSON Message ] -> [ TCP Socket (SOCK_STREAM) ] -> [ IP Packet ] -> [ Wi-Fi / Ethernet ]
 
 ## Set Up
-
-# Install required packages
-
+### Install required packages
+```bash
 pip install -r requirements.txt
+```
 
-# For Mac
-
-# Create necessary **init**.py files (if not in repo)
-
+### Create necessary **init**.py files (if not in repo) (for Mac)
+```bash
 touch **init**.py
 touch shared/**init**.py
 touch server/**init**.py
 touch client/**init**.py
+```
 
-# For Win
-
-# Create necessary **init**.py files (if not in repo)
-
+### Create necessary **init**.py files (if not in repo) (for Win)
+```bash
 type nul > **init**.py
 type nul > shared\_\_init**.py
 type nul > server\_\_init**.py
 type nul > client\_\_init\_\_.py
+```
 
 ## Running the Application
 
@@ -90,29 +88,3 @@ python -m folder.filename
 
 - **Conda**: Try `conda init` then restart terminal
 - **Virtual env**: Make sure you created it with the correct Python version
-
-## Development Workflow (For Mac using conda)
-
-1. **Always activate your environment first**
-
-   ```bash
-   conda activate chatroom-env
-   ```
-
-2. **Navigate to project root**
-
-   ```bash
-   cd /path/to/chatroom-project
-   ```
-
-3. **Run your scripts using module format**
-
-   ```bash
-   python -m server.server
-   python -m client.client
-   ```
-
-4. **Before committing, test that imports work**
-   ```bash
-   python -c "from shared.config import *; print('Imports working!')"
-   ```
