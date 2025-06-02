@@ -14,28 +14,26 @@
 [ GUI ] -> [ JSON Message ] -> [ TCP Socket (SOCK_STREAM) ] -> [ IP Packet ] -> [ Wi-Fi / Ethernet ]
 
 ## Set Up
-
-# Install required packages
-
+### Install required packages
+```bash
 pip install -r requirements.txt
+```
 
-# For Mac
-
-# Create necessary **init**.py files (if not in repo)
-
+### Create necessary **init**.py files (if not in repo) (for Mac)
+```bash
 touch **init**.py
 touch shared/**init**.py
 touch server/**init**.py
 touch client/**init**.py
+```
 
-# For Win
-
-# Create necessary **init**.py files (if not in repo)
-
+### Create necessary **init**.py files (if not in repo) (for Win)
+```bash
 type nul > **init**.py
 type nul > shared\_\_init**.py
 type nul > server\_\_init**.py
 type nul > client\_\_init\_\_.py
+```
 
 ## Running the Application
 
