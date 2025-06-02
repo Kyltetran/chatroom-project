@@ -11,12 +11,30 @@
 
 ## Architecture Diagram
 
-[ GUI ]
-↓
-[ JSON Message ]
-↓
-[ TCP Socket (SOCK_STREAM) ]
-↓
-[ IP Packet ]
-↓
-[ Wi-Fi / Ethernet ]
+[ GUI ] -> [ JSON Message ] -> [ TCP Socket (SOCK_STREAM) ] -> [ IP Packet ] -> [ Wi-Fi / Ethernet ]
+
+## Development Workflow (For Mac using conda)
+
+1. **Always activate your environment first**
+
+   ```bash
+   conda activate chatroom-env
+   ```
+
+2. **Navigate to project root**
+
+   ```bash
+   cd /path/to/chatroom-project
+   ```
+
+3. **Run your scripts using module format**
+
+   ```bash
+   python -m server.server
+   python -m client.client
+   ```
+
+4. **Before committing, test that imports work**
+   ```bash
+   python -c "from shared.config import *; print('Imports working!')"
+   ```
