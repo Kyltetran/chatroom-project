@@ -21,18 +21,18 @@ pip install -r requirements.txt
 
 ### Create necessary **init**.py files (if not in repo) (for Mac)
 ```bash
-touch **init**.py
-touch shared/**init**.py
-touch server/**init**.py
-touch client/**init**.py
+touch __init__.py
+touch shared/__init__.py
+touch server/__init__.py
+touch client/__init__.py
 ```
 
 ### Create necessary **init**.py files (if not in repo) (for Win)
 ```bash
-type nul > **init**.py
-type nul > shared\_\_init**.py
-type nul > server\_\_init**.py
-type nul > client\_\_init\_\_.py
+type nul > __init__.py
+type nul > shared\__init__.py
+type nul > server\__init__.py
+type nul > client\__init__.py
 ```
 
 ## Running the Application
