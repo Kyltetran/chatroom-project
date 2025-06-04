@@ -2,7 +2,7 @@ import json
 import threading
 import socket
 from shared.config import SERVER_IP, SERVER_PORT, BUFFER_SIZE
-from shared.common import parse_message, build_message
+from shared.common import parse_message, build_message, current_timestamp
 from shared.encrypt import encrypt_message, decrypt_message
 import sys
 import os
@@ -31,16 +31,22 @@ def handle_client(conn, addr):
         encrypted = conn.recv(BUFFER_SIZE)
         raw = decrypt_message(encrypted)
         msg = parse_message(raw)
-        username = msg.get("sender")
+        # username = msg.get("sender")
+        temp_name = msg.get("sender")
 
         with lock:
-            if username in clients:
+            if temp_name in clients:
                 rejection = build_message(
                     "system", "server", "username_rejected")
                 conn.send(encrypt_message(rejection))
+                print(
+                    f"[REJECTED] {temp_name} already exists. Closing connection.")
                 conn.close()
                 return
-            clients[username] = conn
+            else:
+                clients[temp_name] = conn
+                username = temp_name
+                print(f"[CLIENTS] Now connected: {list(clients.keys())}")
 
         print(f"[CONNECTED] {username} from {addr}")
 
@@ -87,6 +93,7 @@ def handle_client(conn, addr):
         if username:
             with lock:
                 clients.pop(username, None)
+                print(f"[CLIENTS] Now connected: {list(clients.keys())}")
             leave_msg = build_message(
                 "system", "server", f"{username} has left the chat.")
             broadcast(leave_msg)

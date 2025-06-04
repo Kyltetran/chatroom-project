@@ -1,14 +1,18 @@
 import sys
 import socket
+import threading
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QLineEdit, QTextEdit, QPushButton, QMessageBox, QInputDialog
 )
-from shared.encrypt import encrypt_message
-from shared.common import build_message
+from PyQt5.QtCore import pyqtSignal, QObject
+from shared.encrypt import encrypt_message, decrypt_message
+from shared.common import build_message, parse_message
 from shared.config import SERVER_IP, SERVER_PORT, BUFFER_SIZE
 
 
 class ChatWindow(QWidget):
+    message_received = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Chatroom (Dummy GUI)")
@@ -29,6 +33,45 @@ class ChatWindow(QWidget):
         self.username = None
         self.client = None
         self.setup_connection()
+
+        # if not self.setup_connection():
+        #     sys.exit()
+
+        threading.Thread(target=self.receive_messages, daemon=True).start()
+        self.message_received.connect(self.chat_display.append)
+
+    def receive_messages(self):
+        while True:
+            try:
+                data = self.client.recv(BUFFER_SIZE)
+                if not data:
+                    break
+                decrypted = decrypt_message(data)
+                msg = parse_message(decrypted)
+
+                msg_type = msg.get("type")
+                sender = msg.get("sender")
+                message = msg.get("message")
+                timestamp = msg.get("timestamp")
+
+                if msg_type == "public":
+                    # Display public message from others
+                    display = f"{sender}: {message}"
+                    # self.chat_display.append(display)
+                    self.message_received.emit(display)
+
+                elif msg_type == "system":
+                    self.chat_display.append(f"[{message}]")
+
+                elif msg_type == "private":
+                    # Optional for later
+                    display = f"(Private) {sender}: {message}"
+                    # self.chat_display.append(display)
+                    self.message_received.emit(display)
+
+            except Exception as e:
+                print(f"[RECEIVE ERROR] {e}")
+                break
 
     def setup_connection(self):
         username, ok = QInputDialog.getText(
@@ -55,7 +98,7 @@ class ChatWindow(QWidget):
             return
         msg = build_message("public", self.username, text)
         self.client.send(encrypt_message(msg))
-        self.chat_display.append(f"You: {text}")
+        # self.chat_display.append(f"{self.username}: {text}")
         self.input_box.clear()
 
 
