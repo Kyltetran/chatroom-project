@@ -88,3 +88,9 @@ python -m folder.filename
 
 - **Conda**: Try `conda init` then restart terminal
 - **Virtual env**: Make sure you created it with the correct Python version
+
+# How to run
+
+first run the server.py, you should see the following message: [STARTED] Chat server on 127.0.0.1:8888
+second run the client.py, on the first termial, try to write sth, for example: hello everyone!, you should see [PUBLIC] yourusername: hello everyone!
+on the new terminal, rerun the client file, and type a new name, if you want to send private message, use the following syntax: /w [newusername] Hey, ! :smile:. Now it should appear like [PRIVATE] bob → melanie: hey, melanie! 😄
