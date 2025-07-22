@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+const { ipcRenderer } = window.require("electron");
+
 function WelcomeWindow({ onJoin }) {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -9,7 +11,10 @@ function WelcomeWindow({ onJoin }) {
       setError("Please enter your name to join");
       return;
     }
-    onJoin(name.trim());
+
+    const trimmedName = name.trim();
+    ipcRenderer.send("start-client", trimmedName); // ✅ send to main process
+    onJoin(trimmedName); // ✅ continue with UI logic
   };
 
   return (

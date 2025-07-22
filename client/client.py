@@ -1,3 +1,7 @@
+import client.setup_path
+from shared.config import SERVER_IP, SERVER_PORT, BUFFER_SIZE
+from shared.common import build_message, parse_message
+from shared.encrypt import encrypt_message, decrypt_message
 import socket
 import threading
 import asyncio
@@ -6,13 +10,10 @@ import json
 import time
 from datetime import datetime
 
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# import sys
+# import os
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from shared.encrypt import encrypt_message, decrypt_message
-from shared.common import build_message, parse_message
-from shared.config import SERVER_IP, SERVER_PORT, BUFFER_SIZE
 
 EMOJI_MAP = {
     ":smile:": "😄",
@@ -28,10 +29,12 @@ username_global = None
 client_socket_global = None
 loop_global = None    # Store event loop globally so we can reference it
 
+
 def apply_emoji(text):
     for code, emoji in EMOJI_MAP.items():
         text = text.replace(code, emoji)
     return text
+
 
 async def websocket_handler(websocket, path):
     global username_global, client_socket_global
@@ -79,12 +82,14 @@ async def websocket_handler(websocket, path):
     client_socket_global = client
 
     # Send login request
-    login_message = build_message("system", username_global, "login_request", timestamp=current_timestamp())
+    login_message = build_message(
+        "system", username_global, "login_request", timestamp=current_timestamp())
     client.send(encrypt_message(login_message))
     print(f"[SYSTEM] Connected to server as '{username_global}'")
 
     # Start receiving
-    threading.Thread(target=receive_messages, args=(client, username_global), daemon=True).start()
+    threading.Thread(target=receive_messages, args=(
+        client, username_global), daemon=True).start()
 
     # Handle messages from React
     try:
@@ -108,15 +113,18 @@ async def websocket_handler(websocket, path):
                     }))
                     continue
                 receiver, msg_content = parts[1], parts[2]
-                msg = build_message("private", username_global, msg_content, receiver=receiver, timestamp=timestamp)
+                msg = build_message(
+                    "private", username_global, msg_content, receiver=receiver, timestamp=timestamp)
                 print(f"(Private to {receiver}) {timestamp}: {msg_content}")
             else:
-                msg = build_message("public", username_global, text, timestamp=timestamp)
+                msg = build_message("public", username_global,
+                                    text, timestamp=timestamp)
 
             client_socket_global.send(encrypt_message(msg))
 
     except websockets.ConnectionClosed:
         print("[WEBSOCKET] React UI disconnected")
+
 
 def forward_to_ui(msg_dict):
     asyncio.run_coroutine_threadsafe(
@@ -167,17 +175,21 @@ def receive_messages(sock, username):
             print(f"[RECEIVE ERROR] {e}")
             break
 
+
 def current_timestamp():
     return datetime.now().strftime("%H:%M:%S")
+
 
 async def main_async():
     async with websockets.serve(websocket_handler, "localhost", 6789):
         print("[WEBSOCKET] Server started on ws://localhost:6789")
         await asyncio.Future()  # Run forever
 
+
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
+
 
 def start_client(username):
     global username_global, client_socket_global, message_queue, loop_global
@@ -192,11 +204,13 @@ def start_client(username):
     username_global = username
     client_socket_global = client
 
-    login_message = build_message("system", username, "login_request", timestamp=current_timestamp())
+    login_message = build_message(
+        "system", username, "login_request", timestamp=current_timestamp())
     client.send(encrypt_message(login_message))
     print(f"[SYSTEM] Connected to {SERVER_IP}:{SERVER_PORT} as '{username}'")
 
-    receive_thread = threading.Thread(target=receive_messages, args=(client, username), daemon=True)
+    receive_thread = threading.Thread(
+        target=receive_messages, args=(client, username), daemon=True)
     receive_thread.start()
 
     if not is_port_in_use(6789):
@@ -221,3 +235,11 @@ def start_client(username):
         finally:
             client.close()
             print("[SYSTEM] Connection closed.")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("[ERROR] Username must be provided as a command-line argument.")
+        sys.exit(1)
+    username = sys.argv[1]
+    start_client(username)
