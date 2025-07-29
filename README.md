@@ -1,96 +1,114 @@
-# chatroom-project
+# Chatroom Project
 
-## Networking Overview
+This project is a feature-rich, secure chat application built with Python. It features a modern graphical user interface (GUI) built with `customtkinter`, end-to-end message encryption, and support for large file transfers. The application uses a multi-threaded server to handle concurrent client connections robustly.
 
-| Layer       | Protocol                  | Our Chat App Usage                                |
-| ----------- | ------------------------- | ------------------------------------------------- |
-| Application | JSON over custom protocol | Chat message structure (type, sender, etc.)       |
-| Transport   | TCP                       | Reliable socket connection (`socket.SOCK_STREAM`) |
-| Network     | IP                        | Uses `127.0.0.1` or LAN IP to connect clients     |
-| Link        | Ethernet/Wi-Fi            | Managed by OS/hardware                            |
+## Features
 
-## Architecture Diagram
+* **Graphical User Interface**: A modern, theme-aware GUI built with `customtkinter`.
+* **Private & Public Messaging**: Send messages to all users in the public chat or privately to specific users.
+* **Secure Communication**: All messages are end-to-end encrypted using AES to ensure privacy.
+* **Large File Sharing**: Reliably send and receive files of any size (e.g., PDFs, images) with a custom networking protocol.
+* **Interactive File Downloads**: Clickable links in the chat window open a "Save As" dialog for easy downloading.
+* **Emoji Support**: An interactive, graphical emoji picker allows users to easily add emojis to their messages.
+* **Real-time User List**: See a list of all currently active users in the chatroom.
+* **Concurrent Connections**: The server uses multi-threading to handle multiple clients smoothly and simultaneously.
 
-[ GUI ] -> [ JSON Message ] -> [ TCP Socket (SOCK_STREAM) ] -> [ IP Packet ] -> [ Wi-Fi / Ethernet ]
+## Getting Started
 
-## Set Up
-### Install required packages
+Follow these steps to set up and run the project on your local machine.
+
+### 1. Prerequisites
+
+* Python 3.8 or newer
+* `pip` for installing packages
+* An environment manager like `conda` or `venv`
+
+### 2. Setup
+
+First, clone the repository and navigate into the project's root directory.
+
+```bash
+git clone <your-repository-url>
+cd chatroom-project
+```
+
+Next, create and activate a virtual environment.
+
+```bash
+# Using venv
+python -m venv venv
+source venv/bin/activate  # On Mac/Linux
+venv\Scripts\activate    # On Windows
+
+# Or using Conda
+conda create --name chatroom-env python=3.10
+conda activate chatroom-env
+```
+
+Now, install the required packages.
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### Create necessary **init**.py files (if not in repo) (for Mac)
-```bash
-touch __init__.py
-touch shared/__init__.py
-touch server/__init__.py
-touch client/__init__.py
-```
+Finally, ensure the project is recognized as a Python package by creating `__init__.py` files.
 
-### Create necessary **init**.py files (if not in repo) (for Win)
 ```bash
-type nul > __init__.py
+# On Mac/Linux
+touch shared/__init__.py server/__init__.py client/__init__.py
+
+# On Windows
 type nul > shared\__init__.py
 type nul > server\__init__.py
 type nul > client\__init__.py
 ```
 
-## Running the Application
+### 3. Running the Application
 
-### **IMPORTANT: Always run from the project root directory!**
+**Important:** Always run the following commands from the project's root directory (`chatroom-project/`).
 
-```bash
-# Make sure you're in the project root
-cd /path/to/chatroom-project
-
-# Activate your environment first
-conda activate chatroom-env
-# OR for virtual env:
-# source chatroom-env/bin/activate  (Mac/Linux)
-# chatroom-env\Scripts\activate     (Windows)
-```
-
-### Start the Server
-
+**Step 1: Start the Server**
+Open a terminal and run:
 ```bash
 python -m server.server
 ```
+You should see the confirmation message: `[STARTED] Chat server on 127.0.0.1:8888`
 
-### Start the Client
-
+**Step 2: Start the Client(s)**
+Open one or more new terminal windows and run:
 ```bash
+# To run the Graphical User Interface (GUI)
+python -m client.gui
+
+# To run the Command-Line Interface (CLI)
 python -m client.client
 ```
+You can run multiple clients, and they will all connect to the same server.
 
-### For any other modules
+## Troubleshooting
 
-```bash
-python -m folder.filename
-# Example: python -m utils.helper
+**Error: `ModuleNotFoundError: No module named 'shared'` (or similar)**
+* **Cause**: You are likely running the command from the wrong directory or not using the `-m` flag.
+* **Solution**:
+  1. Make sure your terminal's current directory is the project root (`chatroom-project`).
+  2. Always use the `python -m folder.file` syntax to run scripts. This allows Python to correctly resolve the project's internal imports.
+
+## Project Structure
+
 ```
-
-## Common Issues & Solutions
-
-### "ModuleNotFoundError: No module named 'shared'"
-
-- **Cause**: Running from wrong directory or missing `__init__.py` files
-- **Solution**:
-  1. Make sure you're in the project root directory
-  2. Use `python -m module.file` format instead of `python path/file.py`
-  3. Ensure all `__init__.py` files exist
-
-### "No module named 'server.server'"
-
-- **Cause**: Missing `__init__.py` in server folder or running from wrong directory
-- **Solution**: Create `server/__init__.py` and run from project root
-
-### Environment not activating
-
-- **Conda**: Try `conda init` then restart terminal
-- **Virtual env**: Make sure you created it with the correct Python version
-
-# How to run
-
-first run the server.py, you should see the following message: [STARTED] Chat server on 127.0.0.1:8888
-second run the client.py, on the first termial, try to write sth, for example: hello everyone!, you should see [PUBLIC] yourusername: hello everyone!
-on the new terminal, rerun the client file, and type a new name, if you want to send private message, use the following syntax: /w [newusername] Hey, ! :smile:. Now it should appear like [PRIVATE] bob → melanie: hey, melanie! 😄
+chatroom-project/
+│
+├── client/
+│   ├── gui.py          # The main file for the graphical user interface.
+│   └── client.py       # A secondary command-line client for testing.
+│
+├── server/
+│   └── server.py       # The multi-threaded server application.
+│
+├── shared/
+│   ├── common.py       # Helper functions for message building/parsing.
+│   ├── config.py       # Configuration variables (IP, port).
+│   └── encrypt.py      # Functions for AES encryption and decryption.
+│
+├── requirements.txt    # A list of required Python packages.
+└── README.md           # This file.
