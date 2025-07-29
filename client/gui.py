@@ -156,8 +156,6 @@ class ChatWindow:
         self.input_box.grid(row=0, column=0, padx=(0, 10), sticky="ew")
         self.input_box.bind("<Return>", lambda e: self.send_message())
         self.input_box.bind(
-            "<FocusOut>", lambda e: self._destroy_emoji_frame())
-        self.input_box.bind(
             "<Button-1>", lambda e: self._destroy_emoji_picker())
 
         self.emoji_button = ctk.CTkButton(
@@ -475,6 +473,12 @@ class ChatWindow:
 
         send_msg(self.client, encrypt_message(msg))  # FIXED
         self.input_box.delete(0, "end")
+        # print(f"\nCLIENT SENDING (Plain Text): {msg}")
+        # encrypted_data = encrypt_message(msg)
+        # print(f"CLIENT SENDING (Encrypted): {encrypted_data}\n")
+
+        # send_msg(self.client, encrypted_data)
+        # self.input_box.delete(0, "end")
 
     def _show_emoji_picker(self, event=None):
         """Creates the emoji picker or cancels the hide job if it already exists."""

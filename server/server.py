@@ -52,6 +52,17 @@ def recv_full_message(conn):
         decrypted = decrypt_message(data)
         msg = parse_message(decrypted)
         return msg
+    # try:
+    #     data = recv_msg(conn)
+    #     if not data:
+    #         return None
+
+    #     print(f"\nSERVER RECEIVED (Encrypted): {data}")
+    #     decrypted = decrypt_message(data)
+    #     print(f"SERVER RECEIVED (Decrypted): {decrypted}\n")
+
+    #     msg = parse_message(decrypted)
+    #     return msg
     except Exception as e:
         print(f"[RECV ERROR] {e}")
         return None
