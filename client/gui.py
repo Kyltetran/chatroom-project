@@ -42,6 +42,39 @@ class ChatWindow:
         self.pending_preview_filename = None
         self.image_cache = {}  # Cache for downloaded images
 
+        self.EMOJI_MAP = {
+            # Faces
+            ":smile:": "😄",
+            ":laugh:": "😂",
+            ":wink:": "😉",
+            ":cry:": "😢",
+            ":thinking:": "🤔",
+            ":sunglasses:": "😎",
+            ":party:": "🥳",
+
+            # Gestures
+            ":thumbsup:": "👍",
+            ":thumbsdown:": "👎",
+            ":ok_hand:": "👌",
+            ":clap:": "👏",
+            ":pray:": "🙏",
+
+            # Hearts
+            ":heart:": "❤️",
+            ":broken_heart:": "💔",
+            ":blue_heart:": "💙",
+
+            # Objects & Symbols
+            ":fire:": "🔥",
+            ":rocket:": "🚀",
+            ":star:": "⭐",
+            ":cake:": "🍰",
+            ":coffee:": "☕",
+        }
+        self.emoji_picker_frame = None
+        self.picker_hide_job = None
+        self.tooltip_label = None
+
         self.setup_ui()
         self.setup_connection()
 
@@ -122,6 +155,22 @@ class ChatWindow:
         )
         self.input_box.grid(row=0, column=0, padx=(0, 10), sticky="ew")
         self.input_box.bind("<Return>", lambda e: self.send_message())
+        self.input_box.bind(
+            "<FocusOut>", lambda e: self._destroy_emoji_frame())
+        self.input_box.bind(
+            "<Button-1>", lambda e: self._destroy_emoji_picker())
+
+        self.emoji_button = ctk.CTkButton(
+            self.message_frame,
+            text="😄",
+            width=35,
+            height=35,
+            font=CTkFont(size=18)
+            # The command is removed
+        )
+        self.emoji_button.grid(row=0, column=1)  # No padding here
+        self.emoji_button.bind("<Enter>", self._show_emoji_picker)
+        self.emoji_button.bind("<Leave>", self._hide_emoji_picker_after_delay)
 
         self.send_button = ctk.CTkButton(
             self.message_frame,
@@ -131,7 +180,8 @@ class ChatWindow:
             font=CTkFont(size=12, weight="bold"),
             command=self.send_message
         )
-        self.send_button.grid(row=0, column=1, padx=(0, 10))
+        # 5px padding on BOTH sides
+        self.send_button.grid(row=0, column=2, padx=5)
 
         self.send_file_button = ctk.CTkButton(
             self.message_frame,
@@ -141,7 +191,7 @@ class ChatWindow:
             font=CTkFont(size=12),
             command=self.send_file
         )
-        self.send_file_button.grid(row=0, column=2)
+        self.send_file_button.grid(row=0, column=3)  # No padding here
 
         # Right panel - Active users
         self.users_frame = ctk.CTkFrame(self.root, corner_radius=10)
@@ -426,6 +476,91 @@ class ChatWindow:
         send_msg(self.client, encrypt_message(msg))  # FIXED
         self.input_box.delete(0, "end")
 
+    def _show_emoji_picker(self, event=None):
+        """Creates the emoji picker or cancels the hide job if it already exists."""
+        self._cancel_hide_picker()
+        if self.emoji_picker_frame is None:
+            self._create_emoji_picker()
+
+    def _hide_emoji_picker_after_delay(self, event=None):
+        """Schedules the destruction of the emoji picker after a short delay."""
+        self.picker_hide_job = self.root.after(500, self._destroy_emoji_picker)
+
+    def _cancel_hide_picker(self, event=None):
+        """Cancels a pending hide job."""
+        if self.picker_hide_job:
+            self.root.after_cancel(self.picker_hide_job)
+            self.picker_hide_job = None
+
+    def _create_emoji_picker(self):
+        """Creates and displays the emoji picker frame."""
+        # (This function's content remains the same, but it's included for completeness)
+        self.emoji_picker_frame = ctk.CTkFrame(self.root, border_width=1)
+
+        # Bind events to the frame itself to cancel hiding
+        self.emoji_picker_frame.bind("<Enter>", self._cancel_hide_picker)
+        self.emoji_picker_frame.bind(
+            "<Leave>", self._hide_emoji_picker_after_delay)
+
+        x = self.input_frame.winfo_rootx()
+        y = self.input_frame.winfo_rooty() - 155
+        self.emoji_picker_frame.place(x=x, y=y)
+
+        row, col = 0, 0
+        # Create a mapping of emoji characters back to their codes for the tooltip
+        self.emoji_code_map = {v: k for k, v in self.EMOJI_MAP.items()}
+
+        for emoji in self.EMOJI_MAP.values():
+            emoji_btn = ctk.CTkButton(self.emoji_picker_frame, text=emoji, width=40, height=30,
+                                      font=CTkFont(size=20), fg_color="transparent",
+                                      command=lambda e=emoji: self._on_emoji_select(e))
+            emoji_btn.grid(row=row, column=col, padx=2, pady=2)
+
+            # This part adds the tooltip from request #3
+            emoji_code = self.emoji_code_map[emoji]
+            emoji_btn.bind("<Enter>", lambda event, text=emoji_code: (
+                self._cancel_hide_picker(), self._show_tooltip(event, text)))
+            emoji_btn.bind("<Leave>", self._hide_tooltip)
+
+            col += 1
+            if col >= 5:
+                col = 0
+                row += 1
+
+    def _destroy_emoji_picker(self):
+        if self.emoji_picker_frame:
+            self.emoji_picker_frame.destroy()
+            self.emoji_picker_frame = None
+        self._hide_tooltip()
+
+    def _on_emoji_select(self, emoji_char):
+        """Inserts the selected emoji into the input box."""
+        self.input_box.insert("end", emoji_char)
+        self.input_box.focus()
+
+    def _show_tooltip(self, event, text):
+        """Creates and displays a tooltip label."""
+        self._hide_tooltip()
+        self.tooltip_label = ctk.CTkLabel(self.root, text=text, fg_color="#2B2B2B",
+                                          corner_radius=4, text_color="white",
+                                          font=CTkFont(size=12))
+
+        # Get the main window's position on the screen
+        window_x = self.root.winfo_rootx()
+        window_y = self.root.winfo_rooty()
+
+        # Calculate the correct position inside the window
+        x = event.x_root - window_x + 20  # Position 20px to the right of the cursor
+        y = event.y_root - window_y + 10  # Position 10px below the cursor
+
+        self.tooltip_label.place(x=x, y=y)
+
+    def _hide_tooltip(self, event=None):
+        """Destroys the tooltip label."""
+        if self.tooltip_label:
+            self.tooltip_label.destroy()
+            self.tooltip_label = None
+
     def send_file(self):
         filepath = filedialog.askopenfilename(
             title="Select File to Send",
@@ -610,6 +745,12 @@ class ChatWindow:
 
         self.active_users_list.configure(state="disabled")
 
+    def _apply_emojis(self, text):
+        """Replaces all emoji codes in a string with their emoji characters."""
+        for code, emoji in self.EMOJI_MAP.items():
+            text = text.replace(code, emoji)
+        return text
+
     def receive_messages(self):
         while True:
             try:
@@ -627,15 +768,21 @@ class ChatWindow:
                 receiver = msg.get("receiver", "")
 
                 if msg_type == "public":
-                    self.append_to_chat(f"{sender}: {message}", "public")
+                    # Translate the message before displaying
+                    translated_message = self._apply_emojis(message)
+                    self.append_to_chat(
+                        f"{sender}: {translated_message}", "public")
 
                 elif msg_type == "private":
                     if sender == self.username:
+                        # This part handles messages you send, which don't need translation here
                         self.append_to_chat(
                             f"{receiver}: {message}", "private_sent")
                     else:
+                        # Translate the message before displaying
+                        translated_message = self._apply_emojis(message)
                         self.append_to_chat(
-                            f"{sender}: {message}", "private_received")
+                            f"{sender}: {translated_message}", "private_received")
 
                 elif msg_type == "system":
                     if message.startswith("user_list:"):

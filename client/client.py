@@ -17,12 +17,33 @@ CLIENT_DOWNLOADS_DIR = "client_downloads"
 os.makedirs(CLIENT_DOWNLOADS_DIR, exist_ok=True)
 
 EMOJI_MAP = {
+    # Faces
     ":smile:": "😄",
-    ":heart:": "❤️",
     ":laugh:": "😂",
-    ":sad:": "😢",
+    ":wink:": "😉",
+    ":cry:": "😢",
+    ":thinking:": "🤔",
+    ":sunglasses:": "😎",
+    ":party:": "🥳",
+
+    # Gestures
     ":thumbsup:": "👍",
+    ":thumbsdown:": "👎",
+    ":ok_hand:": "👌",
+    ":clap:": "👏",
+    ":pray:": "🙏",
+
+    # Hearts
+    ":heart:": "❤️",
+    ":broken_heart:": "💔",
+    ":blue_heart:": "💙",
+
+    # Objects & Symbols
     ":fire:": "🔥",
+    ":rocket:": "🚀",
+    ":star:": "⭐",
+    ":cake:": "🍰",
+    ":coffee:": "☕",
 }
 
 
