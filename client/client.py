@@ -63,6 +63,7 @@ def receive_messages(sock, username):
                 os._exit(0)  # Use os._exit to force exit from thread
 
             decrypted = decrypt_message(data)
+            
             msg = parse_message(decrypted)
 
             msg_type = msg.get("type")
@@ -80,7 +81,6 @@ def receive_messages(sock, username):
 
                 else:
                     print(f"\n[SYSTEM] {message}")
-                    print(f"[DEBUG] Received system message: {message}")  # DEBUG
                     gui.root.after(0, lambda m=message: gui.append_to_chat(m, "system"))
             
             elif message == "username_rejected":

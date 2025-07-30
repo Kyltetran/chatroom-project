@@ -5,6 +5,8 @@ import base64
 import os
 import datetime
 import json
+import tkinter as tk
+from tkinter import filedialog, messagebox, simpledialog
 
 import customtkinter as ctk
 from customtkinter import CTkFont
