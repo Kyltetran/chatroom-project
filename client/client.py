@@ -8,6 +8,7 @@ import json
 
 # --- EDITED ---
 # Import the new helper functions and config
+from client import gui
 from shared.encrypt import encrypt_message, decrypt_message
 from shared.common import build_message, parse_message, send_msg, recv_msg
 from shared.config import SERVER_IP, SERVER_PORT
@@ -52,7 +53,6 @@ def apply_emoji(text):
         text = text.replace(code, emoji)
     return text
 
-
 def receive_messages(sock, username):
     while True:
         try:
@@ -76,8 +76,15 @@ def receive_messages(sock, username):
                 if message.startswith("user_list:"):
                     users = message.split(":", 1)[1].split(",")
                     print(f"\n[USERS] Active users: {', '.join(users)}")
+                    gui.root.after(0, lambda: gui.update_users_list(users))
+
                 else:
                     print(f"\n[SYSTEM] {message}")
+                    print(f"[DEBUG] Received system message: {message}")  # DEBUG
+                    gui.root.after(0, lambda m=message: gui.append_to_chat(m, "system"))
+            
+            elif message == "username_rejected":
+                gui.username_rejected = True  # Trigger flag to re-show input dialog
 
             elif msg_type == "public":
                 print(f"\n(Global) {timestamp} {sender} > {message}")
@@ -160,6 +167,7 @@ def send_file(sock, filepath, receiver, username):
             "file_data": encoded_data
         }
         upload_msg_json = json.dumps(upload_msg_dict)
+
         send_msg(sock, encrypt_message(upload_msg_json))
 
         # Step 2: Send the notification message for broadcast

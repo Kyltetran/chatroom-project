@@ -5,8 +5,6 @@ import base64
 import os
 import datetime
 import json
-import tkinter as tk
-from tkinter import filedialog, messagebox, simpledialog
 
 import customtkinter as ctk
 from customtkinter import CTkFont
@@ -217,30 +215,46 @@ class ChatWindow:
             row=1, column=0, padx=20, pady=(0, 20), sticky="nsew")
 
     def setup_connection(self):
-        # Create custom dialog for username input
-        dialog = ctk.CTkInputDialog(
-            text="Enter your username:",
-            title="Login to Chatroom"
-        )
-        username = dialog.get_input()
+        self.username_rejected = False  # used to trigger retry
 
-        if not username:
-            messagebox.showerror("Error", "No username provided.")
-            sys.exit()
+        while True:
+            dialog = ctk.CTkInputDialog(
+                text="Enter your username:",
+                title="Login to Chatroom"
+            )
+            username = dialog.get_input()
 
-        self.username = username
+            if not username:
+                messagebox.showerror("Error", "No username provided.")
+                continue  # re-show dialog
+
+            self.username = username.strip()
+            self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            try:
+                self.client.connect((SERVER_IP, SERVER_PORT))
+                login_msg = build_message("system", self.username, "login_request")
+                send_msg(self.client, encrypt_message(login_msg))
+
+                # Wait for server response
+                response = self.client.recv(BUFFER_SIZE)
+                decrypted = decrypt_message(response)
+                msg = parse_message(decrypted)
+
+                if msg.get("message") == "username_rejected":
+                    messagebox.showerror("Username Taken", "This username is already taken. Please choose another.")
+                    self.client.close()
+                    continue  # re-show dialog
+
+                break  # login accepted
+
+            except Exception as e:
+                messagebox.showerror("Connection Failed", str(e))
+                return
+
         self.root.title(f"Modern Chatroom - {self.username}")
-
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            self.client.connect((SERVER_IP, SERVER_PORT))
-            login_msg = build_message("system", self.username, "login_request")
-            send_msg(self.client, encrypt_message(login_msg))  # FIXED
-        except Exception as e:
-            messagebox.showerror("Connection Failed", str(e))
-            sys.exit()
-
         self.append_to_chat(f"🟢 Connected as {self.username}", "system")
+
 
     def is_image_file(self, filename):
         """Check if file is an image based on extension"""

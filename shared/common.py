@@ -23,8 +23,8 @@ def build_message(msg_type, sender, message, receiver=None, file_data=None, time
     return json.dumps(msg)
 
 
-def parse_message(json_string):
-    return json.loads(json_string)
+def parse_message(message):
+    return json.loads(message)
 
 # New helper function to send a message with a header
 
