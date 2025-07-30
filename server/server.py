@@ -70,7 +70,7 @@ def recv_full_message(conn):
 
 def handle_client(conn, addr):
     username = None
-    
+
     try:
         msg = recv_full_message(conn)
         if not msg:
@@ -94,8 +94,10 @@ def handle_client(conn, addr):
                 username = temp_name
                 # Send user list directly to the new user as well
                 user_list = ",".join(clients.keys())
-                message = build_message("system", "server", f"user_list:{user_list}")
-                send_msg(conn, encrypt_message(message))  # ✅ Direct message to new client
+                message = build_message(
+                    "system", "server", f"user_list:{user_list}")
+                # ✅ Direct message to new client
+                send_msg(conn, encrypt_message(message))
 
                 broadcast_user_list()
                 print(f"[CLIENTS] Now connected: {list(clients.keys())}")
@@ -244,8 +246,9 @@ def handle_client(conn, addr):
                 clients.pop(username, None)
                 broadcast_user_list()
                 print(f"[CLIENTS] Now connected: {list(clients.keys())}")
-            leave_msg = build_message("system", "server", f"{username} has left the chat.")
-            broadcast(leave_msg)
+            leave_msg = build_message(
+                "system", "server", f"{username} has left the chat.")
+            broadcast(json.loads(leave_msg), exclude=username)
             print(f"[DISCONNECTED] {username} from {addr}")
         conn.close()
 
