@@ -19,3 +19,69 @@
 2025-07-30 18:06:17 - INFO - [STARTED] Chat server on 127.0.0.1:8888
 2025-07-30 18:06:32 - INFO - [STARTED] Chat server on 127.0.0.1:8888
 2025-07-30 18:06:36 - INFO - [SHUTDOWN] Server shutting down...
+2025-07-30 18:12:02 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 18:12:29 - INFO - [CLIENTS] Now connected: ['nq']
+2025-07-30 18:12:29 - INFO - [CONNECTED] nq from ('127.0.0.1', 54474)
+2025-07-30 18:12:55 - INFO - [CLIENTS] Now connected: ['nq', 'tam']
+2025-07-30 18:12:55 - INFO - [CONNECTED] tam from ('127.0.0.1', 54478)
+2025-07-30 18:13:02 - INFO - [PUBLIC] nq: hello
+2025-07-30 18:13:18 - INFO - [PUBLIC] nq: okay
+2025-07-30 18:13:23 - INFO - [PUBLIC] nq: I will send you a file
+2025-07-30 18:13:29 - INFO - [UPLOAD] Saved file '6811749992993.mp4' as '18-13-29_6811749992993.mp4' (3305073 bytes)
+2025-07-30 18:13:29 - INFO - [FILE] nq sharing file '6811749992993.mp4' (ID: 18-13-29_6811749992993.mp4)
+2025-07-30 18:13:29 - INFO - [FILE] nq shared publicly: 6811749992993.mp4
+2025-07-30 18:13:36 - INFO - [DOWNLOAD] tam requesting file '18-13-29_6811749992993.mp4'
+2025-07-30 18:13:36 - INFO - [DOWNLOAD] Sent file '18-13-29_6811749992993.mp4' to tam (3305073 bytes)
+2025-07-30 18:14:07 - INFO - [PUBLIC] tam: this is my favorite song
+2025-07-30 18:14:17 - INFO - [UPLOAD] Saved file 'Thanks for .mp4' as '18-14-15_Thanks for .mp4' (65258713 bytes)
+2025-07-30 18:14:17 - INFO - [FILE] tam sharing file 'Thanks for .mp4' (ID: 18-14-15_Thanks for .mp4)
+2025-07-30 18:14:17 - INFO - [FILE] tam shared publicly: Thanks for .mp4
+2025-07-30 18:14:22 - INFO - [DOWNLOAD] nq requesting file '18-14-15_Thanks for .mp4'
+2025-07-30 18:14:23 - INFO - [DOWNLOAD] Sent file '18-14-15_Thanks for .mp4' to nq (65258713 bytes)
+2025-07-30 18:14:48 - INFO - [PUBLIC] nq: cool
+2025-07-30 18:15:23 - INFO - [UPLOAD] Saved file 'IMG_9651 2 (1).MOV' as '18-15-21_IMG_9651 2 (1).MOV' (68593415 bytes)
+2025-07-30 18:15:23 - INFO - [FILE] nq sharing file 'IMG_9651 2 (1).MOV' (ID: 18-15-21_IMG_9651 2 (1).MOV)
+2025-07-30 18:15:23 - INFO - [FILE] nq shared publicly: IMG_9651 2 (1).MOV
+2025-07-30 18:15:27 - INFO - [DOWNLOAD] tam requesting file '18-15-21_IMG_9651 2 (1).MOV'
+2025-07-30 18:15:29 - INFO - [DOWNLOAD] Sent file '18-15-21_IMG_9651 2 (1).MOV' to tam (68593415 bytes)
+2025-07-30 18:15:52 - INFO - [UPLOAD] Saved file '1898.jpg' as '18-15-51_1898.jpg' (31869648 bytes)
+2025-07-30 18:15:52 - INFO - [FILE] nq sharing file '1898.jpg' (ID: 18-15-51_1898.jpg)
+2025-07-30 18:15:52 - INFO - [FILE] nq shared publicly: 1898.jpg
+2025-07-30 18:16:12 - INFO - [CLIENTS] Now connected: ['nq']
+2025-07-30 18:16:12 - INFO - [DISCONNECTED] tam from ('127.0.0.1', 54478)
+2025-07-30 18:16:14 - INFO - [CLIENTS] Now connected: []
+2025-07-30 18:16:14 - INFO - [DISCONNECTED] nq from ('127.0.0.1', 54474)
+2025-07-30 18:17:16 - INFO - [SHUTDOWN] Server shutting down...
+2025-07-30 18:17:17 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 18:17:27 - INFO - [CLIENTS] Now connected: ['tam']
+2025-07-30 18:17:27 - INFO - [CONNECTED] tam from ('127.0.0.1', 54505)
+2025-07-30 18:17:30 - INFO - [CLIENTS] Now connected: ['tam', 'nq']
+2025-07-30 18:17:30 - INFO - [CONNECTED] nq from ('127.0.0.1', 54506)
+2025-07-30 18:17:34 - INFO - [UPLOAD] Saved file '1898.jpg' as '18-17-34_1898.jpg' (31869648 bytes)
+2025-07-30 18:17:34 - INFO - [FILE] nq sharing file '1898.jpg' (ID: 18-17-34_1898.jpg)
+2025-07-30 18:17:34 - INFO - [FILE] nq shared publicly: 1898.jpg
+2025-07-30 18:17:39 - INFO - [CLIENTS] Now connected: ['nq']
+2025-07-30 18:17:39 - INFO - [DISCONNECTED] tam from ('127.0.0.1', 54505)
+2025-07-30 18:17:41 - INFO - [CLIENTS] Now connected: []
+2025-07-30 18:17:41 - INFO - [DISCONNECTED] nq from ('127.0.0.1', 54506)
+2025-07-30 18:23:04 - INFO - [SHUTDOWN] Server shutting down...
+2025-07-30 18:23:05 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 18:23:26 - INFO - [CLIENTS] Now connected: ['nq']
+2025-07-30 18:23:26 - INFO - [CONNECTED] nq from ('127.0.0.1', 54540)
+2025-07-30 18:30:35 - INFO - [CLIENTS] Now connected: []
+2025-07-30 18:30:35 - INFO - [DISCONNECTED] nq from ('127.0.0.1', 54540)
+2025-07-30 22:06:43 - INFO - [SHUTDOWN] Server shutting down...
+2025-07-30 22:06:44 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 22:07:12 - INFO - [CLIENTS] Now connected: ['nq']
+2025-07-30 22:07:12 - INFO - [CONNECTED] nq from ('127.0.0.1', 55133)
+2025-07-30 22:07:12 - INFO - [CLIENTS] Now connected: []
+2025-07-30 22:07:12 - INFO - [DISCONNECTED] nq from ('127.0.0.1', 55133)
+2025-07-30 22:07:33 - INFO - [SHUTDOWN] Server shutting down...
+2025-07-30 22:15:22 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 22:18:34 - INFO - [SHUTDOWN] Server shutting down...
+2025-07-30 22:18:35 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 22:18:41 - INFO - [CLIENTS] Now connected: ['nq']
+2025-07-30 22:18:41 - INFO - [CONNECTED] nq from ('127.0.0.1', 55246)
+2025-07-30 22:25:53 - INFO - [CLIENTS] Now connected: []
+2025-07-30 22:25:53 - INFO - [DISCONNECTED] nq from ('127.0.0.1', 55246)
+2025-07-30 22:25:57 - INFO - [SHUTDOWN] Server shutting down...
