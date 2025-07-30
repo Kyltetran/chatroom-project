@@ -1,0 +1,21 @@
+2025-07-30 18:03:25 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 18:03:33 - INFO - [CLIENTS] Now connected: ['tam']
+2025-07-30 18:03:33 - INFO - [CONNECTED] tam from ('127.0.0.1', 54318)
+2025-07-30 18:03:37 - INFO - [CLIENTS] Now connected: ['tam', 'nq']
+2025-07-30 18:03:37 - INFO - [CONNECTED] nq from ('127.0.0.1', 54320)
+2025-07-30 18:03:49 - INFO - [PUBLIC] nq: hi there
+2025-07-30 18:03:57 - INFO - [PRIVATE] tam -> nq: hi
+2025-07-30 18:04:03 - INFO - [PRIVATE] tam -> nq: ❤️👍
+2025-07-30 18:04:11 - INFO - [UPLOAD] Saved file '2312.10696.pdf' as '18-04-11_2312.10696.pdf' (5619547 bytes)
+2025-07-30 18:04:11 - INFO - [FILE] tam sharing file '2312.10696.pdf' (ID: 18-04-11_2312.10696.pdf)
+2025-07-30 18:04:11 - INFO - [FILE] tam shared publicly: 2312.10696.pdf
+2025-07-30 18:04:24 - INFO - [DOWNLOAD] nq requesting file '18-04-11_2312.10696.pdf'
+2025-07-30 18:04:24 - INFO - [DOWNLOAD] Sent file '18-04-11_2312.10696.pdf' to nq (5619547 bytes)
+2025-07-30 18:04:52 - INFO - [CLIENTS] Now connected: ['tam']
+2025-07-30 18:04:52 - INFO - [DISCONNECTED] nq from ('127.0.0.1', 54320)
+2025-07-30 18:05:10 - INFO - [CLIENTS] Now connected: []
+2025-07-30 18:05:10 - INFO - [DISCONNECTED] tam from ('127.0.0.1', 54318)
+2025-07-30 18:05:21 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 18:06:17 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 18:06:32 - INFO - [STARTED] Chat server on 127.0.0.1:8888
+2025-07-30 18:06:36 - INFO - [SHUTDOWN] Server shutting down...
