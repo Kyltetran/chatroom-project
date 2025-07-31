@@ -6,8 +6,7 @@ import base64
 import os
 import json
 
-# --- EDITED ---
-# Import the new helper functions and config
+# Import the helper functions and config
 from client import gui
 from shared.encrypt import encrypt_message, decrypt_message
 from shared.common import build_message, parse_message, send_msg, recv_msg
@@ -56,7 +55,7 @@ def apply_emoji(text):
 def receive_messages(sock, username):
     while True:
         try:
-            # --- EDITED --- Use the new robust receiving function
+            # Receiving function
             data = recv_msg(sock)
             if not data:
                 print("\n[SYSTEM] Server closed the connection.")
@@ -95,7 +94,7 @@ def receive_messages(sock, username):
                 else:
                     print(f"\n(Private from {sender}) {timestamp}: {message}")
 
-            # --- EDITED --- Handle file notifications from the server
+            # Handle file notifications from the server
             elif msg_type == "file":
                 filename = msg.get("message")
                 file_id = msg.get("file_id")
@@ -107,7 +106,7 @@ def receive_messages(sock, username):
                     print(
                         f"\n[FILE] {sender} sent '{filename}' to the chat. To download, type: /download {file_id}")
 
-            # --- EDITED --- Handle a completed file download from the server
+            # Handle a completed file download from the server
             elif msg_type == "file_download":
                 filename = msg.get("message")
                 file_data_b64 = msg.get("file_data")
@@ -133,9 +132,6 @@ def receive_messages(sock, username):
 
 def current_timestamp():
     return datetime.now().strftime("%H:%M:%S")
-
-# --- EDITED --- This function is completely rewritten to match the server's expectations
-
 
 def send_file(sock, filepath, receiver, username):
     if not os.path.exists(filepath):
@@ -189,9 +185,6 @@ def send_file(sock, filepath, receiver, username):
     except Exception as e:
         print(f"[ERROR] File upload failed: {e}")
 
-# --- EDITED --- This function now uses send_msg
-
-
 def request_file_download(sock, file_id, username):
     try:
         request_msg = {
@@ -218,7 +211,6 @@ def main():
         print(f"[ERROR] Could not connect: {e}")
         return
 
-    # --- EDITED --- Use send_msg for login
     login_message = build_message(
         "system", username, "login_request", timestamp=current_timestamp())
     send_msg(client, encrypt_message(login_message))
@@ -239,7 +231,7 @@ def main():
 
             timestamp = current_timestamp()
 
-            # --- EDITED --- Added commands for file handling
+            # Commands for file handling
             if text.lower().startswith("/sendfile "):
                 parts = text.split(" ", 3)
                 if len(parts) < 2:
@@ -276,7 +268,6 @@ def main():
                 msg = build_message("public", username,
                                     text_with_emoji, timestamp=timestamp)
 
-            # --- EDITED --- Use send_msg for all messages
             send_msg(client, encrypt_message(msg))
 
         except KeyboardInterrupt:

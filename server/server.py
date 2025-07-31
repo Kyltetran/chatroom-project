@@ -194,7 +194,6 @@ def handle_client(conn, addr):
 
                     confirm_msg = build_message(
                         "system", "server", f"File '{filename}' uploaded successfully")
-                    # FIXED: Replaced .send() with send_msg()
                     send_msg(conn, encrypt_message(confirm_msg))
 
                 except Exception as e:
@@ -204,7 +203,6 @@ def handle_client(conn, addr):
                         f"[ERROR] Failed to save uploaded file '{filename}': {e}")
                     error_msg = build_message(
                         "system", "server", f"Failed to upload file: {e}")
-                    # FIXED: Replaced .send() with send_msg()
                     send_msg(conn, encrypt_message(error_msg))
 
             elif msg_type == "file":
@@ -220,13 +218,11 @@ def handle_client(conn, addr):
                         # print(f"[FILE] {sender} → {receiver}: {filename}")
                         logging.info(
                             f"[FILE] {sender} -> {receiver}: {msg.get('message')}")
-                        # FIXED: Replaced .send() with send_msg()
                         send_msg(clients[receiver],
                                  encrypt_message(json.dumps(msg)))
                     else:
                         error = build_message(
                             "system", "server", f"User '{receiver}' not found.")
-                        # FIXED: Replaced .send() with send_msg()
                         send_msg(conn, encrypt_message(error))
                 else:
                     # print(f"[FILE] {sender} shared file publicly: {filename}")
@@ -249,7 +245,6 @@ def handle_client(conn, addr):
                         f"[ERROR] File '{file_id}' not found'")
                     error_msg = build_message(
                         "system", "server", f"File '{file_id}' not found")
-                    # FIXED: Replaced .send() with send_msg()
                     send_msg(conn, encrypt_message(error_msg))
                     continue
 
@@ -268,7 +263,6 @@ def handle_client(conn, addr):
                         "file_data": file_data_b64
                     }
 
-                    # FIXED: Replaced .send() with send_msg()
                     send_msg(clients[requester], encrypt_message(
                         json.dumps(download_msg)))
                     # print(
@@ -282,7 +276,6 @@ def handle_client(conn, addr):
                         f"[ERROR] Could not send file '{file_id}': {e}")
                     error_msg = build_message(
                         "system", "server", f"Error downloading file: {e}")
-                    # FIXED: Replaced .send() with send_msg()
                     send_msg(conn, encrypt_message(error_msg))
 
     except Exception as e:
